@@ -1,0 +1,33 @@
+https://demo.baremaps.com/#16.01/66.074373/76.796183
+
+https://overpass-turbo.eu/
+
+[out:json];
+(
+  way["man_made"="pipeline"]["substance"="gas"]({{bbox}}); // фильтруем линии, обозначающие газопроводы
+  relation["man_made"="pipeline"]["substance"="gas"]({{bbox}}); // фильтруем отношения, содержащие газопроводы
+);
+out body geom;
+
+
+Газовые компрессорные станции:  
+node["substation"="compression"]["substance"="gas"]({{bbox}});  
+way["substation"="compression"]["substance"="gas"]({{bbox}});  
+relation["substation"="compression"]["substance"="gas"]({{bbox}});  
+
+[out:json];
+// Промышленные зоны (landuse=industrial)
+(
+  way["landuse"="industrial"]({{bbox}});
+  relation["landuse"="industrial"]({{bbox}});
+);
+
+// Газовые компрессорные станции (substation=compression AND substance=gas)
+(
+  node["substation"="compression"]["substance"="gas"]({{bbox}});
+  way["substation"="compression"]["substance"="gas"]({{bbox}});
+  relation["substation"="compression"]["substance"="gas"]({{bbox}});
+);
+
+// Объединяем оба результата
+out body geom;
